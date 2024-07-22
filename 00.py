@@ -27,5 +27,5 @@ ui, uo, variance, vhf, vidya, vortex, vp, vwma, wcp, willr, wma, xsignals
 zlma, zscore
 
 '''''''''
-# roc, rsi, ema,sma, smi,
-# rma,macd, atr, vwap, aroon,
+# roc, rsi, ema,sma, smi, MAMAD
+# rma,macd, atr, vwap, aroon, ROOZI
