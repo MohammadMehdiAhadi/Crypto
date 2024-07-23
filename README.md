@@ -27,7 +27,7 @@ zlma, zscore
 -----------------------------------------------------------------------------------------------------
 NEEDED :
 
-LogisticRegression , SVC , MLPClassifier , DecisionTreeClassifier , RandomForestClassifier , KNeighborsClassifier
+# LogisticRegression , SVC , MLPClassifier , DecisionTreeClassifier , RandomForestClassifier , KNeighborsClassifier
 
 -----------------------------------------------------------------------------------------------------
 # GridSearchCv() , Corr() , ClassificationReport()
