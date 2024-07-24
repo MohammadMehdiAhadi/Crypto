@@ -8,6 +8,6 @@ df["rma"] = ta.rma(df["close"], length=7)
 df["macd"] = ta.macd(df["close"])
 df["atr"] = ta.atr(df["high"], df["low"], df["close"], length=7)
 df["vwap"] = ta.vwap(df["high"], df["low"], df["close"], df["volume"])
-df["aroon"] = ta.aroon(df["high"], df["low"], length=7)
+# df["aroon"] = ta.aroon(df["high"], df["low"], length=7)
 
 print(help(ta.rma))
