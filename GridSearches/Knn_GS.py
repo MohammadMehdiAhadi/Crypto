@@ -8,7 +8,7 @@ x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
 params = {"n_neighbors": [5, 10, 15],
           "weights": ['uniform', 'distance'],
-          "algorithm": ['auto', 'ball_tree', 'kd_tree', 'brute']}
+          "algorithm": ['ball_tree', 'kd_tree', 'brute']}
 model = GridSearchCV(estimator=Knn(),
                      param_grid=params,
                      scoring="accuracy")
