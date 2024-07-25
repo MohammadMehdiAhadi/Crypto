@@ -15,7 +15,7 @@ def dt_fit(x_train, y_train):
     return model
 
 
-def dt_pred(x_train, y_train,x_test):
+def dt_pred(x_test,x_train, y_train):
     model = dt_fit(x_train, y_train)
     pred = model.predict(x_test)
     return pred
