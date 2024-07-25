@@ -1,24 +1,18 @@
 from sklearn.neighbors import KNeighborsClassifier as Knn
-from sklearn.metrics import classification_report,accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_digits
+from sklearn.model_selection import GridSearchCV
 
+X, y = load_digits(return_X_y=True)
+x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-
-def knn_model_maker ():
-    model = Knn(n_jobs=-1,n_neighbors=10)
-    return model
-
-def knn_fit (x_train,y_train):
-    model = knn_model_maker()
-    model.fit(x_train,y_train)
-    return model
-
-def knn_pred(x_test,x_train,y_train):
-    model = knn_fit(x_train,y_train)
-    pred = model.predict(x_test)
-    return pred
-    # return classification_report(y_test,pred),accuracy_score(y_test,pred)
-
-
-# print(knn_pred(x_train,y_train,x_test,y_test))
+params = {"n_neighbors": [5, 10, 15],
+          "weights": ['uniform', 'distance'],
+          "algorithm": ['auto', 'ball_tree', 'kd_tree', 'brute']}
+model = GridSearchCV(estimator=Knn(),
+                     param_grid=params,
+                     scoring="accuracy")
+model.fit(x_train, y_train)
+model.predict(x_test)
+print(model.best_params_)
+print(model.best_score_)
