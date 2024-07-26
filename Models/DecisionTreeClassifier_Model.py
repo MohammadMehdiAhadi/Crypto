@@ -5,7 +5,7 @@ from sklearn.datasets import load_digits
 
 
 def dt_model_maker():
-    model = DecisionTreeClassifier()
+    model = DecisionTreeClassifier(criterion='log_loss', min_samples_leaf=4, min_samples_split=3, splitter='random')
     return model
 
 
@@ -15,7 +15,7 @@ def dt_fit(x_train, y_train):
     return model
 
 
-def dt_pred(x_train, y_train,x_test):
+def dt_pred(x_train, y_train, x_test):
     model = dt_fit(x_train, y_train)
     pred = model.predict(x_test)
     return pred

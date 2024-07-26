@@ -43,3 +43,15 @@ NEEDED :
 # {'activation': 'identity', 'hidden_layer_sizes': (100,), 'solver': 'adam'} 0.577077922077922 ---->mlp
 
 # {'criterion': 'log_loss', 'min_samples_leaf': 2, 'min_samples_split': 3, 'n_estimators': 100} 0.5340259740259741 ---> rf
+
+-----------------------------------------------------------------------------------------------------
+predictions_stacking = np.vstack([mlp_pred(x_train, y_train, x_test),
+                                  logistic_pred(x_train, y_train, x_test),
+                                  knn_pred(x_train, y_train, x_test)]
+                                 ).T
+
+model_meta = RandomForestClassifier()
+
+دقت مدل Stacking: 0.705718270571827
+
+-----------------------------------------------------------------------------------------------------
