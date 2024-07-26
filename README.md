@@ -31,4 +31,15 @@ NEEDED :
 
 -----------------------------------------------------------------------------------------------------
 # GridSearchCv() , Corr() , ClassificationReport()
+-----------------------------------------------------------------------------------------------------
 
+# {'criterion': 'log_loss', 'min_samples_leaf': 4, 'min_samples_split': 3, 'splitter': 'random'} 0.5737012987012986 ----->DT
+
+
+# {'algorithm': 'ball_tree', 'n_neighbors': 20, 'weights': 'distance'} 0.6378571428571429 ---->knn
+
+# {'C': 7, 'dual': False, 'max_iter': 700, 'penalty': 'l1', 'solver': 'liblinear'} 0.7347402597402597 --->logistic
+
+# {'activation': 'identity', 'hidden_layer_sizes': (100,), 'solver': 'adam'} 0.577077922077922 ---->mlp
+
+# {'criterion': 'log_loss', 'min_samples_leaf': 2, 'min_samples_split': 3, 'n_estimators': 100} 0.5340259740259741 ---> rf

@@ -21,27 +21,33 @@ df["ema_7"] = ta.ema(df["Close"], length=7)
 df["sma_7"] = ta.sma(df["Close"], length=7)
 
 sq = ta.squeeze(df["High"], df["Low"], df["Close"])
+
 df["squeeze"] = sq["SQZ_20_2.0_20_1.5"]
 
+df["cci"] = ta.cci(df["High"], df["Low"], df["Close"], length=7)
 
-
-df["cci"] = ta.cci(df["High"], df["Low"],  df["Close"], length = 7)
 df["rma"] = ta.rma(df["Close"], length=7)
-# df["MACD_12_26_9"], df["MACDh_12_26_9"], df["MACDs_12_26_9"] = ta.macd(df["Close"])
-df["atr"] = ta.atr(df["High"], df["Low"],  df["Close"], length = 7)
+
+df["atr"] = ta.atr(df["High"], df["Low"], df["Close"], length=7)
 
 df["Benefit"] = df["Tommorw_Close"] - df["Open"]
+
 df["Benefit"] = df["Benefit"].apply(lambda x: 1 if x >= 0 else -1)
-# print(df.columns)
 
+df.to_csv("dataframe_knn.csv")
 
-X=df[['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits',
-       'Tommorw_Close', 'roc_7', 'rsi_7', 'ema_7', 'sma_7', 'squeeze', 'cci',
-       'rma',  'atr']].dropna()
-y = df["Benefit"].dropna()
+data = pd.read_csv("dataframe_knn.csv", index_col="Date")
 
-x_train, x_test, y_train, y_test = train_test_split(X,y,test_size=0.3,shuffle=False,random_state=17)
-params = {"n_neighbors": [5, 10, 15],
+# print(data.index)
+# print(data.info)
+
+X = df[['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits',
+        'roc_7', 'rsi_7', 'ema_7', 'sma_7', 'squeeze', 'cci',
+        'rma', 'atr']]["2023-08-13 00:00:00+00:00":]
+y = df["Benefit"]["2023-08-13 00:00:00+00:00":]
+
+x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False, random_state=17)
+params = {"n_neighbors": [10,15,20],
           "weights": ['uniform', 'distance'],
           "algorithm": ['ball_tree', 'kd_tree', 'brute']}
 model = GridSearchCV(estimator=Knn(),
