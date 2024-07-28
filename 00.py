@@ -1,10 +1,18 @@
-import pandas_ta as ta
+
 import pandas as pd
+import pandas_ta as ta
 
-# roc, rsi, ema,sma, smi ----> MAMAD
-
+# Assuming you have already installed pandas_ta
 df = pd.DataFrame()
 df = df.ta.ticker("BTC-USD", period="1y", interval="1d")
+
+df["Date"] = df.index
+df["Weekday"] = df["Date"].dt.weekday
+print(df["Weekday"])
+
+# print(df["Date"])
+
+
 
 # df["Tommorw_Close"] = df["Close"].shift(-1)
 #
@@ -32,8 +40,8 @@ df = df.ta.ticker("BTC-USD", period="1y", interval="1d")
 #
 # 'Dividends', 'Stock Splits'
 # df.drop(["Dividends","Stock Splits"],inplace = True,axis =1)
-print(help(ta.wcp))
-df["wcp"] = ta.wcp(df["High"],df["Low"],df["Close"])
+# print(help(ta.wcp))
+# df["wcp"] = ta.wcp(df["High"],df["Low"],df["Close"])
 # print(df.columns)
 # print(ww)
 #
