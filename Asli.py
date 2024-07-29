@@ -71,24 +71,47 @@ accuracy = np.mean(predictions_final == y_test)
 print("دقت مدل Stacking:", accuracy)
 
 # Classification reports
-print(classification_report(y_test, mlp_pred(x_train, y_train, x_test)))
-print(classification_report(y_test, logistic_pred(x_train, y_train, x_test)))
-print(classification_report(y_test, knn_pred(x_train, y_train, x_test)))
-print(classification_report(y_test, svm_pred(x_train, y_train, x_test)))
-print(classification_report(y_test, dt_pred(x_train, y_train, x_test)))
-print(classification_report(y_test, rf_pred(x_train, y_train, x_test)))
-print(classification_report(y_test, predictions_final))
+# print(classification_report(y_test, mlp_pred(x_train, y_train, x_test)))
+# print(classification_report(y_test, logistic_pred(x_train, y_train, x_test)))
+# print(classification_report(y_test, knn_pred(x_train, y_train, x_test)))
+# print(classification_report(y_test, svm_pred(x_train, y_train, x_test)))
+# print(classification_report(y_test, dt_pred(x_train, y_train, x_test)))
+# print(classification_report(y_test, rf_pred(x_train, y_train, x_test)))
+# print(classification_report(y_test, predictions_final))
 
-# Plotting (if needed)
-# data_new = pd.read_csv("final_dataframe.csv")
-# fig, ax1 = plt.subplots(1, 1)
-# ax1.plot(data_new["Date"].values, data_new["Close"].values, label="BTC Price")
-# ax1.plot(data_new["Date"].values, mlp_pred(x_train, y_train, x_test), label="MLP")
-# ax1.set_ylabel("Close Price")
-# ax1.set_title("BTC-USD Price and Rolling Mean")
-# ax1.legend()
-# plt.tight_layout()
-# plt.show()
+
+
+
+data_new = pd.read_csv("final_dataframe.csv")
+predictions_df = pd.DataFrame({
+    "Date": data_new["Date"].values[-len(predictions_final):],  # Align with predictions
+    "Benefit": df["Benefit"].values[-len(predictions_final):],
+    "MLP_Prediction": mlp_pred(x_train, y_train, x_test),
+    "Logistic_Prediction": logistic_pred(x_train, y_train, x_test),
+    "KNN_Prediction": knn_pred(x_train, y_train, x_test),
+    # Add other model predictions here...
+})
+
+# Plotting historical BTC benefit and model predictions
+plt.figure(figsize=(10, 6))
+plt.plot(predictions_df["Date"], predictions_df["Benefit"], label="BTC Benefit")
+plt.plot(predictions_df["Date"], predictions_df["MLP_Prediction"], label="MLP")
+plt.plot(predictions_df["Date"], predictions_df["Logistic_Prediction"], label="Logistic Regression")
+plt.plot(predictions_df["Date"], predictions_df["KNN_Prediction"], label="KNN")
+# Add other model predictions here...
+
+plt.xlabel("Date")
+plt.ylabel("Benefit")
+plt.title("BTC-USD Benefit and Model Predictions")
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+
+
+
+
+
 
 
 
