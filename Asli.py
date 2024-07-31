@@ -1,4 +1,3 @@
-
 import pandas as pd
 import pandas_ta as ta
 import matplotlib.pyplot as plt
@@ -14,22 +13,25 @@ from Models.LogisticRegression_Model import *
 from Models.SVC_Model import *
 from Models.DecisionTreeClassifier_Model import *
 
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
+
 # Load data
 df = pd.DataFrame()
 df = df.ta.ticker("BTC-USD", period="10y", interval="1d")
 
 # Feature engineering
 df["Tommorw_Close"] = df["Close"].shift(-1)
-df["roc_7"] = ta.roc(df["Close"], length=7)
-df["rsi_7"] = ta.rsi(df["Close"], length=7)
-df["ema_7"] = ta.ema(df["Close"], length=7)
-df["sma_7"] = ta.sma(df["Close"], length=7)
+df["roc"] = ta.roc(df["Close"])
+df["rsi"] = ta.rsi(df["Close"])
+df["ema"] = ta.ema(df["Close"])
+df["sma"] = ta.sma(df["Close"])
 df["wcp"] = ta.wcp(df["High"], df["Low"], df["Close"])
 sq = ta.squeeze(df["High"], df["Low"], df["Close"])
 df["squeeze"] = sq["SQZ_20_2.0_20_1.5"]
-df["cci"] = ta.cci(df["High"], df["Low"], df["Close"], length=7)
-df["rma"] = ta.rma(df["Close"], length=7)
-df["atr"] = ta.atr(df["High"], df["Low"], df["Close"], length=7)
+df["cci"] = ta.cci(df["High"], df["Low"], df["Close"])
+df["rma"] = ta.rma(df["Close"])
+df["atr"] = ta.atr(df["High"], df["Low"], df["Close"])
 
 # Add date and day of week
 df["Date"] = df.index
@@ -49,10 +51,10 @@ df.to_csv("final_dataframe.csv")
 data = pd.read_csv("final_dataframe.csv", index_col="Date")
 
 # Define features and target
-X = df[['Open', 'High', 'Low', 'Close', 'Volume', 'day_of_week',
-        'roc_7', 'rsi_7', 'ema_7', 'sma_7', 'wcp', 'squeeze', 'cci',
-        'rma', 'atr']]["2014-10-06 00:00:00+00:00":]
-y = df["Benefit"]["2014-10-06 00:00:00+00:00":]
+X = data[['Open', 'High', 'Low', 'Close', 'Volume', 'day_of_week',
+          'roc', 'rsi', 'ema', 'sma', 'wcp', 'squeeze', 'cci',
+          'rma', 'atr']]["2014-10-07 00:00:00+00:00":]
+y = data["Benefit"]["2014-10-07 00:00:00+00:00":]
 
 # Split data
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False, random_state=17)
@@ -62,7 +64,7 @@ predictions_stacking = np.vstack([mlp_pred(x_train, y_train, x_test),
                                   logistic_pred(x_train, y_train, x_test),
                                   knn_pred(x_train, y_train, x_test),
                                   svm_pred(x_train, y_train, x_test),
-                                  dt_pred(x_train,y_train,x_test),
+                                  dt_pred(x_train, y_train, x_test),
                                   rf_pred(x_train, y_train, x_test)]).T
 
 # Meta model prediction
@@ -78,9 +80,17 @@ print(classification_report(y_test, svm_pred(x_train, y_train, x_test)))
 print(classification_report(y_test, dt_pred(x_train, y_train, x_test)))
 print(classification_report(y_test, rf_pred(x_train, y_train, x_test)))
 print(classification_report(y_test, predictions_final))
-#
 
+# Assuming 'predictions_final' contains your model predictions
+conf_matrix = confusion_matrix(y_test, predictions_final)
 
+# Create a heatmap for the confusion matrix
+plt.figure(figsize=(6, 4))
+sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Reds", cbar=False)
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.title("Confusion Matrix")
+plt.show()
 
 # data_new = pd.read_csv("final_dataframe.csv")
 # predictions_df = pd.DataFrame({
@@ -132,13 +142,6 @@ print(classification_report(y_test, predictions_final))
 # plt.legend()
 # plt.tight_layout()
 # plt.show()
-
-
-
-
-
-
-
 
 
 # df = pd.DataFrame()
@@ -236,4 +239,3 @@ print(classification_report(y_test, predictions_final))
 # # Adjust layout and show plot
 # plt.tight_layout()
 # plt.show()
-
