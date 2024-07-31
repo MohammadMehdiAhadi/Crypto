@@ -96,22 +96,8 @@ import plotly.graph_objects as go
 
 
 
-import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
-
 # Import your models
-from Models.MLPClassifier_Model import *
 from Models.Knn_Model import *
-from Models.RandomForestClassifier_Model import *
-from Models.LogisticRegression_Model import *
-from Models.SVC_Model import *
-from Models.DecisionTreeClassifier_Model import *
-
-import seaborn as sns
-from sklearn.metrics import confusion_matrix
-
 
 
 # Load data
@@ -119,27 +105,43 @@ df = pd.DataFrame()
 df = df.ta.ticker("BTC-USD", period="10y", interval="1d")
 
 # Feature engineering
-df["Tommorw_Close"] = df["Close"].shift(-1)
-df["roc_7"] = ta.roc(df["Close"], length=7)
-df["rsi_7"] = ta.rsi(df["Close"], length=7)
-df["ema_7"] = ta.ema(df["Close"], length=7)
-df["sma_7"] = ta.sma(df["Close"], length=7)
+df["Tommorow_Close"] = df["Close"].shift(-1)
+df["Tommorow_Open"] = df["Open"].shift(-1)
+df["roc"] = ta.roc(df["Close"])
+df["rsi"] = ta.rsi(df["Close"])
+df["ema"] = ta.ema(df["Close"])
+df["sma"] = ta.sma(df["Close"])
 df["wcp"] = ta.wcp(df["High"], df["Low"], df["Close"])
 sq = ta.squeeze(df["High"], df["Low"], df["Close"])
 df["squeeze"] = sq["SQZ_20_2.0_20_1.5"]
-df["cci"] = ta.cci(df["High"], df["Low"], df["Close"], length=7)
-df["rma"] = ta.rma(df["Close"], length=7)
-df["atr"] = ta.atr(df["High"], df["Low"], df["Close"], length=7)
+df["cci"] = ta.cci(df["High"], df["Low"], df["Close"])
+df["rma"] = ta.rma(df["Close"])
+df["atr"] = ta.atr(df["High"], df["Low"], df["Close"])
 
+df['std_dev'] = ta.stdev(df['Close'])
+df['ema12'] = df['Close'].ewm(span=12).mean()
 
-# # Add date and day of week
+# Calculate the 26-day EMA (long-term)
+df['ema26'] = df['Close'].ewm(span=26).mean()
+
+# Calculate the MACD line
+df['macd'] = df['ema12'] - df['ema26']
+
+# Calculate the 9-day EMA of the MACD (signal line)
+df['signal'] = df['macd'].ewm(span=9).mean()
+
+# Calculate the histogram
+df['histogram'] = df['macd'] - df['signal']
+# Calculate Bollinger Bands
+df['upper_band'] = df['sma'] + (2 * df['std_dev'])
+df['lower_band'] = df['sma'] - (2 * df['std_dev'])
+# Add date and day of week
 df["Date"] = df.index
 df["day_of_week"] = df["Date"].dt.weekday
-df["aberration"]= (ta.aberration(df["High"],df["Low"], df["Close"]).values).reshape(-1,1)
 
 # Calculate benefit
-df["Benefit"] = df["Tommorw_Close"] - df["Open"]
-df["Benefit"] = df["Benefit"].apply(lambda x: 1 if x >= 0 else -1)
+df["Benefit"] = df["Tommorow_Close"] - df["Tommorow_Open"]
+df["Benefit"] = df["Benefit"].apply(lambda x: 1 if x >= 0 else 0)
 
 # Drop unnecessary columns
 df.drop(["Dividends", "Stock Splits"], inplace=True, axis=1)
