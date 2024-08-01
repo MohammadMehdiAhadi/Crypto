@@ -146,4 +146,5 @@ df["Benefit"] = df["Benefit"].apply(lambda x: 1 if x >= 0 else 0)
 # Drop unnecessary columns
 df.drop(["Dividends", "Stock Splits"], inplace=True, axis=1)
 
-print(df.corr())
+data = df.corr()
+data.to_csv("Correlation.csv")

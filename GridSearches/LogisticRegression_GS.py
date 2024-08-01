@@ -7,51 +7,71 @@ import pandas_ta as ta
 import pandas as pd
 
 df = pd.DataFrame()
-df = df.ta.ticker("BTC-USD", period="1y", interval="1d")
+df = df.ta.ticker("BTC-USD", period="10y", interval="1d")
 
-df["Tommorw_Close"] = df["Close"].shift(-1)
-
-df["roc_7"] = ta.roc(df["Close"], length=7)
-
-df["rsi_7"] = ta.rsi(df["Close"], length=7)
-
-df["ema_7"] = ta.ema(df["Close"], length=7)
-
-df["sma_7"] = ta.sma(df["Close"], length=7)
-
+# Feature engineering
+df["Tommorow_Close"] = df["Close"].shift(-1)
+df["Tommorow_Open"] = df["Open"].shift(-1)
+df["roc"] = ta.roc(df["Close"])
+df["rsi"] = ta.rsi(df["Close"])
+df["ema"] = ta.ema(df["Close"])
+df["sma"] = ta.sma(df["Close"])
+df["wcp"] = ta.wcp(df["High"], df["Low"], df["Close"])
 sq = ta.squeeze(df["High"], df["Low"], df["Close"])
-
 df["squeeze"] = sq["SQZ_20_2.0_20_1.5"]
+df["cci"] = ta.cci(df["High"], df["Low"], df["Close"])
+df["rma"] = ta.rma(df["Close"])
+df["atr"] = ta.atr(df["High"], df["Low"], df["Close"])
 
-df["cci"] = ta.cci(df["High"], df["Low"], df["Close"], length=7)
+df['std_dev'] = ta.stdev(df['Close'])
+df['ema12'] = df['Close'].ewm(span=12).mean()
 
-df["rma"] = ta.rma(df["Close"], length=7)
+# Calculate the 26-day EMA (long-term)
+df['ema26'] = df['Close'].ewm(span=26).mean()
 
-df["atr"] = ta.atr(df["High"], df["Low"], df["Close"], length=7)
+# Calculate the MACD line
+df['macd'] = df['ema12'] - df['ema26']
 
-df["Benefit"] = df["Tommorw_Close"] - df["Open"]
+# Calculate the 9-day EMA of the MACD (signal line)
+df['signal'] = df['macd'].ewm(span=9).mean()
 
-df["Benefit"] = df["Benefit"].apply(lambda x: 1 if x >= 0 else -1)
+# Calculate the histogram
+df['histogram'] = df['macd'] - df['signal']
+# Calculate Bollinger Bands
+df['upper_band'] = df['sma'] + (2 * df['std_dev'])
+df['lower_band'] = df['sma'] - (2 * df['std_dev'])
+# Add date and day of week
+df["Date"] = df.index
+df["day_of_week"] = df["Date"].dt.weekday
 
-df.to_csv("dataframe_knn.csv")
+# Calculate benefit
+df["Benefit"] = df["Tommorow_Close"] - df["Tommorow_Open"]
+df["Benefit"] = df["Benefit"].apply(lambda x: 1 if x >= 0 else 0)
 
-data = pd.read_csv("dataframe_knn.csv", index_col="Date")
+# Drop unnecessary columns
+df.drop(["Dividends", "Stock Splits"], inplace=True, axis=1)
 
-# print(data.index)
-# print(data.info)
+# Save to CSV
+df.to_csv("final_dataframe.csv")
 
-X = df[['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits',
-        'roc_7', 'rsi_7', 'ema_7', 'sma_7', 'squeeze', 'cci',
-        'rma', 'atr']]["2023-08-13 00:00:00+00:00":]
-y = df["Benefit"]["2023-08-13 00:00:00+00:00":]
+# Load data from CSV
+data = pd.read_csv("final_dataframe.csv", index_col="Date")
 
+# Define features and target
+X = data[['Open', 'High', 'Low', 'Close', "Tommorow_Open", 'Volume', "histogram",
+          'sma', "ema", 'squeeze', 'upper_band', 'lower_band', 'macd',
+          'day_of_week']]["2014-10-20 00:00:00+00:00":"2024-07-30 00:00:00+00:00"]
+y = data["Benefit"]["2014-10-20 00:00:00+00:00":"2024-07-30 00:00:00+00:00"]
+
+# Split data
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False, random_state=17)
+
 
 params = {"penalty": ['l1', 'l2'],
           "dual": [True, False],
           "C": [5,7,9],
           "solver" : ['lbfgs', 'liblinear', 'saga'],
-          "max_iter" : [250,500,700]
+          "max_iter" : [250,500,300,700]
           }
 model = GridSearchCV(estimator=LogisticRegression(),
                      param_grid=params,

@@ -33,16 +33,16 @@ NEEDED :
 # GridSearchCv() , Corr() , ClassificationReport()
 -----------------------------------------------------------------------------------------------------
 
-# {'criterion': 'log_loss', 'min_samples_leaf': 4, 'min_samples_split': 3, 'splitter': 'random'} 0.5737012987012986 ----->DT
+# {'criterion': 'entropy', 'min_samples_leaf': 4, 'min_samples_split': 3, 'splitter': 'best'}  0.4763493074351218 ----->DT
 
 
-# {'algorithm': 'kd_tree', 'n_neighbors': 8, 'weights': 'distance'}   0.4986014071060681 ---->knn
+# {'algorithm': 'kd_tree', 'n_neighbors': 8, 'weights': 'distance'}  0.5029570254614038 ---->knn
 
-# {'C': 7, 'dual': False, 'max_iter': 700, 'penalty': 'l1', 'solver': 'liblinear'} 0.7347402597402597 --->logistic
+# {'C': 5, 'dual': False, 'max_iter': 300, 'penalty': 'l1', 'solver': 'saga'}  0.522566225368327 --->logistic
 
-# {'activation': 'identity', 'hidden_layer_sizes': (100,), 'solver': 'adam'} 0.577077922077922 ---->mlp
+# {'activation': 'logistic', 'hidden_layer_sizes': (100,), 'solver': 'adam' , 'max_iter': 1500}  0.5369269959462605 ---->mlp
 
-# {'criterion': 'log_loss', 'min_samples_leaf': 2, 'min_samples_split': 3, 'n_estimators': 100} 0.5340259740259741 ---> rf
+# {'criterion': 'entropy', 'min_samples_leaf': 2, 'min_samples_split': 3, 'n_estimators': 400} 0.4644477239048167 ---> rf
 
 -----------------------------------------------------------------------------------------------------
 predictions_stacking = np.vstack([mlp_pred(x_train, y_train, x_test),
