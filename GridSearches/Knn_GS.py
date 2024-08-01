@@ -67,7 +67,7 @@ y = data["Benefit"]["2014-10-20 00:00:00+00:00":"2024-07-30 00:00:00+00:00"]
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False, random_state=17)
 
 
-params = {"n_neighbors": [5,7,8,9,10],
+params = {"n_neighbors": [5,7,8,9,10,20],
           "weights": ['uniform', 'distance'],
           "algorithm": [ 'kd_tree','ball_tree', 'brute']}
 model = GridSearchCV(estimator=Knn(),

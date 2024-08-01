@@ -8,7 +8,7 @@ import pandas_ta as ta
 
 
 def knn_model_maker():
-    model = Knn(algorithm='ball_tree', n_neighbors=20, weights='distance')
+    model = Knn(algorithm='kd_tree', n_neighbors=8, weights='distance')
     return model
 
 

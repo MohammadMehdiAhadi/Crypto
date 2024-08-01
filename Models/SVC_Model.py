@@ -6,9 +6,9 @@ from sklearn.datasets import load_digits
 
 def svm_model_maker():
     model = SVC(C=3.0,
-                kernel="sigmoid",
+                kernel="rbf",
                 tol=1e-5,
-                gamma='auto')
+                gamma='scale')
     return model
 
 
