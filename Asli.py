@@ -63,11 +63,11 @@ data = pd.read_csv("final_dataframe.csv", index_col="Date")
 # Define features and target
 X = data[['Open', 'High', 'Low', 'Close', "Tommorow_Open", 'Volume', "histogram",
           'sma', "ema", 'squeeze', 'upper_band', 'lower_band', 'macd',
-          'day_of_week']]["2014-10-20 00:00:00+00:00":"2024-07-30 00:00:00+00:00"]
-y = data["Benefit"]["2014-10-20 00:00:00+00:00":"2024-07-30 00:00:00+00:00"]
+          'day_of_week']]["2014-10-20 00:00:00+00:00":"2024-07-31 00:00:00+00:00"]
+y = data["Benefit"]["2014-10-20 00:00:00+00:00":"2024-07-31 00:00:00+00:00"]
 
 # Split data
-x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False, random_state=17)
+x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.1, shuffle=False, random_state=17)
 
 # Stacking predictions
 predictions_stacking = np.vstack([mlp_pred(x_train, y_train, x_test),
@@ -78,8 +78,8 @@ predictions_stacking = np.vstack([mlp_pred(x_train, y_train, x_test),
                                   rf_pred(x_train, y_train, x_test)]).T
 
 # Meta model prediction
-# predictions_final = dt_pred(predictions_stacking, y_test, predictions_stacking)
-model = MLPClassifier(hidden_layer_sizes=(200,))
+# predictions_final = logistic_pred(predictions_stacking, y_test, predictions_stacking)
+model = LogisticRegression()
 model.fit(predictions_stacking, y_test)
 predictions_final = model.predict(predictions_stacking)
 accuracy = np.mean(predictions_final == y_test)
