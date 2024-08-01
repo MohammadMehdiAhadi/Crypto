@@ -5,7 +5,7 @@ from sklearn.datasets import load_digits
 
 
 def svm_model_maker():
-    model = SVC(C=3.0,
+    model = SVC(C=4.0,
                 kernel="rbf",
                 tol=1e-5,
                 gamma='scale')
