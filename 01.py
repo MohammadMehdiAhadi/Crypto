@@ -1,33 +1,28 @@
-# Roozi Mokhi
-import pandas_ta as ta
-import pandas as pd
+# this page is for training and testing models
 
-df = pd.DataFrame()
-df = df.ta.ticker("BTC-USD", period="10y", interval="1d")
-df["Tommorow_Close"] = df["Close"].shift(-1)
-df["Tommorow_Open"] = df["Open"].shift(-1)
-df["roc"] = ta.roc(df["Close"])
-df["rsi"] = ta.rsi(df["Close"])
-df["ema"] = ta.ema(df["Close"])
-df["sma"] = ta.sma(df["Close"])
-df["wcp"] = ta.wcp(df["High"], df["Low"], df["Close"])
-sq = ta.squeeze(df["High"], df["Low"], df["Close"])
-df["squeeze"] = sq["SQZ_20_2.0_20_1.5"]
-df["cci"] = ta.cci(df["High"], df["Low"], df["Close"])
-df["rma"] = ta.rma(df["Close"])
-df["atr"] = ta.atr(df["High"], df["Low"], df["Close"])
+import numpy as np
+from Models.MLPClassifier_Model import *
+from Models.Knn_Model import *
+from Models.RandomForestClassifier_Model import *
+from Models.LogisticRegression_Model import *
+from Models.SVC_Model import *
+from Models.DecisionTreeClassifier_Model import *
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
 
-# Add date and day of week
-df["Date"] = df.index
-df["day_of_week"] = df["Date"].dt.weekday
+# Load data from CSV
+data = pd.read_csv("final_dataframe.csv", index_col="Date")
 
-# Calculate benefit
-df["Benefit"] = df["Tommorow_Close"] - df["Tommorow_Open"]
-df["Benefit"] = df["Benefit"].apply(lambda x: 1 if x >= 0 else -1)
+# Define features and target
+X = data[['Open', 'High', 'Low', 'Close', "Tommorow_Open", 'Volume', "histogram", "ema7", "ema14", "ema21",
+          'sma', "ema", 'squeeze', 'upper_band', 'lower_band', 'macd',
+          'day_of_week']]["2014-10-20 00:00:00+00:00":"2024-07-31 00:00:00+00:00"]
+y = data["Benefit"]["2014-10-20 00:00:00+00:00":"2024-07-31 00:00:00+00:00"]
 
-# Drop unnecessary columns
-df.drop(["Dividends", "Stock Splits"], inplace=True, axis=1)
+# Split data
+model = MLPClassifier(activation='logistic', hidden_layer_sizes=(100,), solver='adam', max_iter=1500)
+model.fit(X, y)
 
-# print(rma)
-print(df)
-# print(help(ta.cci))
+pred = model.predict(X)
+print(classification_report(y, pred))
+# Stacking predictions
