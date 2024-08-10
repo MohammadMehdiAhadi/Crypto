@@ -19,8 +19,8 @@ data = pd.read_csv("final_dataframe.csv", index_col="Date")
 # Define features and target
 X = data[['Open', 'High', 'Low', 'Close', "Tommorow_Open", 'Volume', "histogram","ema7","ema14","ema21",
           'sma', "ema", 'squeeze', 'upper_band', 'lower_band', 'macd',
-          'day_of_week']]["2014-10-20 00:00:00+00:00":"2024-07-31 00:00:00+00:00"]
-y = data["Benefit"]["2014-10-20 00:00:00+00:00":"2024-07-31 00:00:00+00:00"]
+          'day_of_week']]["2014-10-30 00:00:00+00:00":"2024-08-01 00:00:00+00:00"]
+y = data["Benefit"]["2014-10-30 00:00:00+00:00":"2024-08-01 00:00:00+00:00"]
 
 # Split data
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.006, shuffle=False, random_state=17)
@@ -55,5 +55,6 @@ sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Reds", cbar=False)
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
 plt.title("Confusion Matrix")
+plt.savefig("final_predict.jpg")
 plt.show()
 
