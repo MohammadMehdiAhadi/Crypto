@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.neighbors import KNeighborsClassifier
 from Models.MLPClassifier_Model import *
 from Models.Knn_Model import *
 from Models.RandomForestClassifier_Model import *
