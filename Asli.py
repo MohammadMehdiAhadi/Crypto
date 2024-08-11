@@ -15,15 +15,16 @@ from Models.Final_Knn_Model import  *
 
 # Load data from CSV
 data = pd.read_csv("final_dataframe.csv", index_col="Date")
+n = len(data)
 
 # Define features and target
 X = data[['Open', 'High', 'Low', 'Close', "Tommorow_Open", 'Volume', "histogram","ema7","ema14","ema21",
           'sma', "ema", 'squeeze', 'upper_band', 'lower_band', 'macd',
-          'day_of_week']]["2014-10-30 00:00:00+00:00":"2024-08-01 00:00:00+00:00"]
-y = data["Benefit"]["2014-10-30 00:00:00+00:00":"2024-08-01 00:00:00+00:00"]
+          'day_of_week']].iloc[30:n-1]
+y = data["Benefit"].iloc[30:n-1]
 
 # Split data
-x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.006, shuffle=False, random_state=17)
+x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.005, shuffle=False, random_state=17)
 
 # Stacking predictions
 predictions_stacking = np.vstack([#logistic_pred(x_train, y_train, x_test),
