@@ -23,7 +23,7 @@ y = data["Benefit"].iloc[30:n - 1]
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.005, shuffle=False, random_state=17)
 
 # Stacking predictions
-predictions_stacking = np.vstack([  # logistic_pred(x_train, y_train, x_test),
+predictions_stacking = np.vstack([  # logistic_pred(x_train, y_train, x_test),درصد خوبی ارایه نمیداد
     mlp_pred(x_train, y_train, x_test),
     knn_pred(x_train, y_train, x_test),
     svm_pred(x_train, y_train, x_test),
@@ -47,10 +47,13 @@ print(classification_report(y_test, predictions_final))
 # Create a heatmap for the confusion matrix
 
 conf_matrix = confusion_matrix(y_test, predictions_final)
-plt.figure(figsize=(6, 4))
+plt.figure(figsize=(10, 8))
 sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Reds", cbar=False)
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
 plt.title("Confusion Matrix")
 plt.savefig("final_predict.jpg")
 plt.show()
+
+
+print("Done")

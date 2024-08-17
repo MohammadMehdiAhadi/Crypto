@@ -57,3 +57,8 @@ df.drop(["Dividends", "Stock Splits"], inplace=True, axis=1)
 
 # Save to CSV
 df.to_csv("final_dataframe.csv")
+
+
+print("File Is Ready To Use")
+
+print("Now Go And Run The Asli.py File")
