@@ -11,7 +11,7 @@ import seaborn as sns
 from sklearn.metrics import confusion_matrix
 
 # Load data from CSV
-data = pd.read_csv("final_dataframe.csv", index_col="Date")
+data = pd.read_csv("../final_dataframe.csv", index_col="Date")
 
 # Define features and target
 X = data[['Open', 'High', 'Low', 'Close', "Tommorow_Open", 'Volume', "histogram", "ema7", "ema14", "ema21",
