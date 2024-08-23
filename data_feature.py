@@ -1,5 +1,5 @@
 try :
-
+    import pandas as pd
     import pandas_ta as ta
     import yfinance as yf
     # Load data
@@ -8,12 +8,14 @@ try :
 
     # df = pd.DataFrame()
     # df = df.ta.ticker("BTC-USD", period="10y", interval="1d")
-    df = yf.download("BTC-USD",period="10y", interval="1d")
+    df = yf.download("BTC-USD",period="730d", interval="1h")
+    df.index = pd.to_datetime(df.index)
+
     if not df.empty:
 
         # Feature engineering
-        df["Tommorow_Close"] = df["Close"].shift(-1)
-        df["Tommorow_Open"] = df["Open"].shift(-1)
+        df["Next_Hour_Close"] = df["Close"].shift(-1)
+        df["Next_Hour_Open"] = df["Open"].shift(-1)
         df["roc"] = ta.roc(df["Close"])
         df["rsi"] = ta.rsi(df["Close"])
         df["ema"] = ta.ema(df["Close"])
@@ -62,7 +64,7 @@ try :
 
 
         # Calculate benefit
-        df["Benefit"] = df["Tommorow_Close"] - df["Tommorow_Open"]
+        df["Benefit"] = df["Next_Hour_Close"] - df["Next_Hour_Open"]
         df["Benefit"] = df["Benefit"].apply(lambda x: 1 if x >= 0 else 0)
 
 

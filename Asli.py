@@ -19,7 +19,7 @@ try:
         n = len(data)
 
         # Define features and target
-        X = data[['Open', 'High', 'Low', 'Close', "Tommorow_Open", 'Volume', "histogram", "ema7", "ema14", "ema21",
+        X = data[['Open', 'High', 'Low', 'Close', "Next_Hour_Open", 'Volume', "histogram", "ema7", "ema14", "ema21",
                   'sma', 'squeeze', 'upper_band', 'lower_band', 'macd',
                   'day_of_week']].iloc[29:n - 1]
         y = data["Benefit"].iloc[29:n - 1]
@@ -28,7 +28,7 @@ try:
         x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.005, shuffle=False, random_state=17)
 
         # Stacking predictions
-        predictions_stacking = np.vstack([  # logistic_pred(x_train, y_train, x_test),درصد خوبی ارایه نمیداد
+        predictions_stacking = np.vstack([logistic_pred(x_train, y_train, x_test),
             mlp_pred(x_train, y_train, x_test),
             knn_pred(x_train, y_train, x_test),
             svm_pred(x_train, y_train, x_test),
@@ -44,9 +44,9 @@ try:
         print("MLPClassifier :")
         print(classification_report(y_test, mlp_pred(x_train, y_train, x_test), zero_division=1))
         print("________________________________________________________________")
-        # print("Logistic :")
-        # print(classification_report(y_test, logistic_pred(x_train, y_train, x_test),zero_division = 1))
-        # print("________________________________________________________________")
+        print("Logistic :")
+        print(classification_report(y_test, logistic_pred(x_train, y_train, x_test),zero_division = 1))
+        print("________________________________________________________________")
         print("KNN :")
         print(classification_report(y_test, knn_pred(x_train, y_train, x_test), zero_division=1))
         print("________________________________________________________________")

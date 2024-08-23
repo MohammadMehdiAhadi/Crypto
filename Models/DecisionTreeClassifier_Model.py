@@ -5,7 +5,7 @@ from sklearn.datasets import load_digits
 
 
 def dt_model_maker():
-    model = DecisionTreeClassifier(criterion='entropy', min_samples_leaf=4, min_samples_split=3, splitter='best')
+    model = DecisionTreeClassifier(criterion='log_loss', min_samples_leaf=4, min_samples_split=5, splitter='random')
     return model
 
 

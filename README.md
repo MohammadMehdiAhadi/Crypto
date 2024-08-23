@@ -90,9 +90,9 @@ NEEDED :
 
 # {'algorithm': 'kd_tree', 'n_neighbors': 8, 'weights': 'distance'} 0.5029570254614038 ---->knn
 
-# {'C': 5, 'dual': False, 'max_iter': 300, 'penalty': 'l1', 'solver': 'saga'} 0.522566225368327 --->logistic
+# {'C': 9, 'max_iter': 500, 'penalty': 'l1', 'solver': 'liblinear'} 0.5275123839231892 --->logistic
 
-# {'activation': 'logistic', 'hidden_layer_sizes': (100,), 'solver': 'adam' , 'max_iter': 1500} 0.5369269959462605 ---->mlp
+# {'activation': 'logistic', 'hidden_layer_sizes': (300,), 'solver': 'lbfgs', 'max_iter' : 1500} 0.51514905584001 ---->mlp
 
 # {'criterion': 'entropy', 'min_samples_leaf': 2, 'min_samples_split': 3, 'n_estimators': 400} 0.4644477239048167 ---> rf
 

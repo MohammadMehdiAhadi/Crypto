@@ -1,29 +1,48 @@
-import pandas as pd
-from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.neighbors import KNeighborsClassifier as Knn
+import numpy as np
+from sklearn.model_selection import GridSearchCV
+from sklearn.neighbors import KNeighborsClassifier
 
-data = pd.read_csv("C:\\Crypto\\final_dataframe.csv", index_col="Date")
+from Models.MLPClassifier_Model import *
+from Models.Knn_Model import *
+from Models.RandomForestClassifier_Model import *
+from Models.LogisticRegression_Model import *
+from Models.SVC_Model import *
+from Models.DecisionTreeClassifier_Model import *
 
-# Define features and target
-X = data[['Open', 'High', 'Low', 'Close', "Tommorow_Open", 'Volume', "histogram","ema7","ema14","ema21",
-          'sma', "ema", 'squeeze', 'upper_band', 'lower_band', 'macd',
-          'day_of_week']]["2014-10-20 00:00:00+00:00":"2024-07-31 00:00:00+00:00"]
-y = data["Benefit"]["2014-10-20 00:00:00+00:00":"2024-07-31 00:00:00+00:00"]
+from Models.Final_Knn_Model import *
 
-# Split data
-x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.006, shuffle=False, random_state=17)
+data = pd.read_csv("final_dataframe.csv", index_col="Date")
+if not data.empty:
+
+    n = len(data)
+
+    # Define features and target
+    X = data[['Open', 'High', 'Low', 'Close', "Next_Hour_Open", 'Volume', "histogram", "ema7", "ema14", "ema21",
+              'sma', 'squeeze', 'upper_band', 'lower_band', 'macd',
+              'day_of_week']].iloc[29:n - 1]
+    y = data["Benefit"].iloc[29:n - 1]
+
+    # Split data
+    x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.005, shuffle=False, random_state=17)
+
+    # Stacking predictions
+    predictions_stacking = np.vstack([logistic_pred(x_train, y_train, x_test),
+        mlp_pred(x_train, y_train, x_test),
+        knn_pred(x_train, y_train, x_test),
+        svm_pred(x_train, y_train, x_test),
+        dt_pred(x_train, y_train, x_test),
+        rf_pred(x_train, y_train, x_test)]).T
 
 
 
-
-
-params = {"n_neighbors": [5,7,8,9,10,20],
-          "weights": ['uniform', 'distance'],
-          "algorithm": [ 'kd_tree','ball_tree', 'brute']}
-model = GridSearchCV(estimator=Knn(),
+models = [KNeighborsClassifier(),MLPClassifier(),RandomForestClassifier(),SVC(),DecisionTreeClassifier(),LogisticRegression()]
+params = {}
+model = GridSearchCV(estimator=models,
                      param_grid=params,
                      scoring="accuracy")
-model.fit(x_train, y_train)
-model.predict(x_test)
+model.fit(predictions_stacking, y_test)
+model.predict(predictions_stacking)
 print(model.best_params_)
 print(model.best_score_)
+print(model.best_estimator_)
+# predictions_stacking, y_test, predictions_stacking

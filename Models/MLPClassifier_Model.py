@@ -5,7 +5,7 @@ from sklearn.datasets import load_digits
 
 
 def mlp_model_maker():
-    model = MLPClassifier(activation='logistic', hidden_layer_sizes=(100,), solver='adam', max_iter=1500)
+    model = MLPClassifier(activation='logistic', hidden_layer_sizes=(300,), solver='lbfgs', max_iter=1500)
     return model
 
 
