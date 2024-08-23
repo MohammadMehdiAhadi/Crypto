@@ -25,7 +25,7 @@ try:
         y = data["Benefit"].iloc[29:n - 1]
 
         # Split data
-        x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.005, shuffle=False, random_state=17)
+        x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.0005, shuffle=False, random_state=17)
 
         # Stacking predictions
         predictions_stacking = np.vstack([logistic_pred(x_train, y_train, x_test),

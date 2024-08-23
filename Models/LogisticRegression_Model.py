@@ -5,7 +5,7 @@ from sklearn.datasets import load_digits
 
 
 def logistic_model_maker():
-    model = LogisticRegression(C=9, max_iter=500, penalty='l1', solver='liblinear')
+    model = LogisticRegression(C=9, max_iter=750, penalty='l1', solver='liblinear')
     return model
 
 
