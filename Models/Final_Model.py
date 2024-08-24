@@ -7,19 +7,19 @@ import pandas as pd
 import pandas_ta as ta
 
 
-def knn_model_maker():
-    model = Knn(algorithm='kd_tree', n_neighbors=8, weights='distance')
+def final_model_maker():
+    model = Knn(algorithm='auto', n_neighbors=8, weights='distance')
     return model
 
 
-def knn_fit(x_train, y_train):
-    model = knn_model_maker()
+def final_fit(x_train, y_train):
+    model = final_model_maker()
     model.fit(x_train, y_train)
     return model
 
 
-def final_knn_pred(x_train, y_train, x_test):
-    model = knn_fit(x_train, y_train)
+def final_pred(x_train, y_train, x_test):
+    model = final_fit(x_train, y_train)
     pred = model.predict(x_test)
     return pred
 

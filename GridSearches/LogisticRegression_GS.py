@@ -1,4 +1,4 @@
-from Models.Final_Knn_Model import *
+from Models.Final_Model import *
 from sklearn.model_selection import GridSearchCV
 from sklearn.linear_model import LogisticRegression
 # Load data from CSV

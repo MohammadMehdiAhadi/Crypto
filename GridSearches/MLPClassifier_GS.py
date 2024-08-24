@@ -1,6 +1,6 @@
 from sklearn.neural_network import MLPClassifier
 
-from Models.Final_Knn_Model import *
+from Models.Final_Model import *
 from sklearn.model_selection import GridSearchCV
 
 # Load data from CSV

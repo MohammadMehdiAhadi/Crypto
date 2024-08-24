@@ -5,7 +5,7 @@ from sklearn.datasets import load_digits
 
 
 def rf_model_maker():
-    model = RandomForestClassifier(criterion='entropy', min_samples_leaf=2, min_samples_split=3, n_estimators=400)
+    model = RandomForestClassifier(criterion='gini', min_samples_leaf=5, min_samples_split=4, n_estimators=500)
     return model
 
 

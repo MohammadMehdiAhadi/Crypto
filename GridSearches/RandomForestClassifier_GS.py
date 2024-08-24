@@ -1,6 +1,6 @@
 from sklearn.ensemble import RandomForestClassifier
 
-from Models.Final_Knn_Model import *
+from Models.Final_Model import *
 from sklearn.model_selection import GridSearchCV
 
 # Load data from CSV
@@ -19,10 +19,10 @@ if not data.empty:
     x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.0005, shuffle=False, random_state=17)
 
 
-    params = {"n_estimators": [100, 200, 300, 500],
+    params = {"n_estimators": [200, 300, 500],
               "criterion": ["gini", "entropy", "log_loss"],
-              "min_samples_split": [2, 3, 4, 5],
-              "min_samples_leaf": [1, 2, 3, 4, 5]
+              "min_samples_split": [2, 3, 4,5],
+              "min_samples_leaf": [1, 2, 3,4,5]
               }
     model = GridSearchCV(estimator=RandomForestClassifier(),
                          param_grid=params,

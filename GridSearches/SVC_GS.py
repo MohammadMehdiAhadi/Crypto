@@ -1,6 +1,6 @@
 from sklearn.svm import SVC
 
-from Models.Final_Knn_Model import *
+from Models.Final_Model import *
 from sklearn.model_selection import GridSearchCV
 
 # Load data from CSV
@@ -19,7 +19,7 @@ if not data.empty:
     x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.0005, shuffle=False, random_state=17)
 
     params = {"C": [3.0, 2.0],
-              "kernel": ['poly', 'rbf', 'sigmoid', 'precomputed']
+              "kernel": ['poly', 'rbf']
               }
     model = GridSearchCV(estimator=SVC(tol=1e-5, gamma='scale'),
                          param_grid=params,

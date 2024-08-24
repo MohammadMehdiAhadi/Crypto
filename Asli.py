@@ -9,7 +9,7 @@ try:
     from Models.DecisionTreeClassifier_Model import *
     import seaborn as sns
     from sklearn.metrics import confusion_matrix
-    from Models.Final_Knn_Model import *
+    from Models.Final_Model import *
 
 
     # Load data from CSV
@@ -28,15 +28,16 @@ try:
         x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.0005, shuffle=False, random_state=17)
 
         # Stacking predictions
-        predictions_stacking = np.vstack([logistic_pred(x_train, y_train, x_test),
+        predictions_stacking = np.vstack([#logistic_pred(x_train, y_train, x_test), دقت پایین بود
             mlp_pred(x_train, y_train, x_test),
             knn_pred(x_train, y_train, x_test),
             svm_pred(x_train, y_train, x_test),
-            dt_pred(x_train, y_train, x_test),
-            rf_pred(x_train, y_train, x_test)]).T
+            dt_pred(x_train, y_train, x_test)
+            #rf_pred(x_train, y_train, x_test) دقت پایین بود
+                                          ]).T
 
         # Meta model prediction
-        predictions_final = knn_pred(predictions_stacking, y_test, predictions_stacking)
+        predictions_final = final_pred(predictions_stacking, y_test, predictions_stacking)
         accuracy = np.mean(predictions_final == y_test)
         print("دقت مدل Stacking:", accuracy * 100)
         print("________________________________________________________________")
@@ -44,9 +45,9 @@ try:
         print("MLPClassifier :")
         print(classification_report(y_test, mlp_pred(x_train, y_train, x_test), zero_division=1))
         print("________________________________________________________________")
-        print("Logistic :")
-        print(classification_report(y_test, logistic_pred(x_train, y_train, x_test),zero_division = 1))
-        print("________________________________________________________________")
+        # print("Logistic :")
+        # print(classification_report(y_test, logistic_pred(x_train, y_train, x_test),zero_division = 1))
+        # print("________________________________________________________________")
         print("KNN :")
         print(classification_report(y_test, knn_pred(x_train, y_train, x_test), zero_division=1))
         print("________________________________________________________________")
@@ -56,9 +57,9 @@ try:
         print("DecisionTree :")
         print(classification_report(y_test, dt_pred(x_train, y_train, x_test), zero_division=1))
         print("________________________________________________________________")
-        print("RandomForest :")
-        print(classification_report(y_test, rf_pred(x_train, y_train, x_test), zero_division=1))
-        print("________________________________________________________________")
+        # print("RandomForest :")
+        # print(classification_report(y_test, rf_pred(x_train, y_train, x_test), zero_division=1))
+        # print("________________________________________________________________")
         print("Final :")
         print(classification_report(y_test, predictions_final))
         print("________________________________________________________________")
