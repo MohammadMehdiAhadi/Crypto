@@ -11,7 +11,6 @@ try:
     from sklearn.metrics import confusion_matrix
     from Models.Final_Model import *
 
-
     # Load data from CSV
     data = pd.read_csv("final_dataframe.csv", index_col="Date")
     if not data.empty:
@@ -28,13 +27,13 @@ try:
         x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.0005, shuffle=False, random_state=17)
 
         # Stacking predictions
-        predictions_stacking = np.vstack([#logistic_pred(x_train, y_train, x_test), دقت پایین بود
+        predictions_stacking = np.vstack([  # logistic_pred(x_train, y_train, x_test), دقت پایین بود
             mlp_pred(x_train, y_train, x_test),
             knn_pred(x_train, y_train, x_test),
             svm_pred(x_train, y_train, x_test),
             dt_pred(x_train, y_train, x_test)
-            #rf_pred(x_train, y_train, x_test) دقت پایین بود
-                                          ]).T
+            # rf_pred(x_train, y_train, x_test) دقت پایین بود
+        ]).T
 
         # Meta model prediction
         predictions_final = final_pred(predictions_stacking, y_test, predictions_stacking)
@@ -91,5 +90,6 @@ try:
     else:
         print("Couldn't Load The Data")
         print("Try Again")
-except:
-    pass
+except Exception as e:
+    print("Something Went Wrong")
+    print(e)

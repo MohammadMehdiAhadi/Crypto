@@ -1,16 +1,15 @@
-try :
+try:
     import pandas as pd
     import pandas_ta as ta
     import yfinance as yf
+
     # Load data
     print("Downloading Data ...")
     print("Please Wait")
 
-    # df = pd.DataFrame()
-    # df = df.ta.ticker("BTC-USD", period="10y", interval="1d")
-    df = yf.download("BTC-USD",period="730d", interval="1h")
-    df.index = pd.to_datetime(df.index)
+    df = yf.download("BTC-USD", period="730d", interval="1h")
 
+    df.index = pd.to_datetime(df.index).tz_convert('UTC')
     if not df.empty:
 
         # Feature engineering
@@ -57,29 +56,22 @@ try :
         df['upper_band'] = df['sma'] + (2 * df['std_dev'])
         df['lower_band'] = df['sma'] - (2 * df['std_dev'])
 
-
         # Add date and day of week
         df["Date"] = df.index
         df["day_of_week"] = df["Date"].dt.weekday
-
 
         # Calculate benefit
         df["Benefit"] = df["Next_Hour_Close"] - df["Next_Hour_Open"]
         df["Benefit"] = df["Benefit"].apply(lambda x: 1 if x >= 0 else 0)
 
-
-        # # Drop unnecessary columns
-        # df.drop(["Dividends", "Stock Splits"], inplace=True, axis=1)
-
-
         # Save to CSV
         df.to_csv("final_dataframe.csv")
-
 
         print("File Is Ready To Use")
         print("Now Go And Run The Asli.py File")
     else:
         print("Something Went Wrong")
         print("Check Your Connection please!")
-except:
-    pass
+except Exception as e:
+    print("Something Went Wrong")
+    print(e)
