@@ -176,6 +176,9 @@
 #
 #
 #
-
-
-
+# import pandas as pd
+# import yfinance as yf
+# data = yf.download("BTC-USD", period="730d", interval="1h")
+# data.index = pd.to_datetime(data.index).tz_convert('UTC')
+# data.dropna()
+# print(data.shape)

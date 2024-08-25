@@ -10,7 +10,8 @@ try:
     df = yf.download("BTC-USD", period="730d", interval="1h")
 
     df.index = pd.to_datetime(df.index).tz_convert('UTC')
-    if not df.empty:
+
+    if not df.empty :
 
         # Feature engineering
         df["Next_Hour_Close"] = df["Close"].shift(-1)

@@ -13,27 +13,29 @@ try:
 
     # Load data from CSV
     data = pd.read_csv("final_dataframe.csv", index_col="Date")
+
     if not data.empty:
 
         n = len(data)
 
         # Define features and target
-        X = data[['Open', 'High', 'Low', 'Close', "Next_Hour_Open", 'Volume', "histogram", "ema7", "ema14", "ema21",
+        X = data[['Open', 'High', 'Low', 'Close', 'Volume', 'Next_Hour_Open',
+                  'ema7', 'ema14', 'ema21', 'histogram',
                   'sma', 'squeeze', 'upper_band', 'lower_band', 'macd',
                   'day_of_week']].iloc[29:n - 1]
         y = data["Benefit"].iloc[29:n - 1]
 
         # Split data
-        x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.0005, shuffle=False, random_state=17)
+        x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.0005, shuffle=False)
 
         # Stacking predictions
-        predictions_stacking = np.vstack([  # logistic_pred(x_train, y_train, x_test), دقت پایین بود
-            mlp_pred(x_train, y_train, x_test),
-            knn_pred(x_train, y_train, x_test),
-            svm_pred(x_train, y_train, x_test),
-            dt_pred(x_train, y_train, x_test)
-            # rf_pred(x_train, y_train, x_test) دقت پایین بود
-        ]).T
+        predictions_stacking = np.vstack([logistic_pred(x_train, y_train, x_test),
+                                          mlp_pred(x_train, y_train, x_test),
+                                          knn_pred(x_train, y_train, x_test),
+                                          svm_pred(x_train, y_train, x_test),
+                                          # dt_pred(x_train, y_train, x_test), دقت پایین بود
+                                          rf_pred(x_train, y_train, x_test)
+                                          ]).T
 
         # Meta model prediction
         predictions_final = final_pred(predictions_stacking, y_test, predictions_stacking)
@@ -44,21 +46,21 @@ try:
         print("MLPClassifier :")
         print(classification_report(y_test, mlp_pred(x_train, y_train, x_test), zero_division=1))
         print("________________________________________________________________")
-        # print("Logistic :")
-        # print(classification_report(y_test, logistic_pred(x_train, y_train, x_test),zero_division = 1))
-        # print("________________________________________________________________")
+        print("Logistic :")
+        print(classification_report(y_test, logistic_pred(x_train, y_train, x_test), zero_division=1))
+        print("________________________________________________________________")
         print("KNN :")
         print(classification_report(y_test, knn_pred(x_train, y_train, x_test), zero_division=1))
         print("________________________________________________________________")
         print("SVM :")
         print(classification_report(y_test, svm_pred(x_train, y_train, x_test), zero_division=1))
         print("________________________________________________________________")
-        print("DecisionTree :")
-        print(classification_report(y_test, dt_pred(x_train, y_train, x_test), zero_division=1))
-        print("________________________________________________________________")
-        # print("RandomForest :")
-        # print(classification_report(y_test, rf_pred(x_train, y_train, x_test), zero_division=1))
+        # print("DecisionTree :")
+        # print(classification_report(y_test, dt_pred(x_train, y_train, x_test), zero_division=1))
         # print("________________________________________________________________")
+        print("RandomForest :")
+        print(classification_report(y_test, rf_pred(x_train, y_train, x_test), zero_division=1))
+        print("________________________________________________________________")
         print("Final :")
         print(classification_report(y_test, predictions_final))
         print("________________________________________________________________")
