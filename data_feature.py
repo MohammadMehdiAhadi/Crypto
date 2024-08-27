@@ -69,7 +69,7 @@ try:
         df.to_csv("final_dataframe.csv")
 
         print("File Is Ready To Use")
-        print("Now Go And Run The Asli.py File")
+        print("Now Go And Run The Main.py File")
     else:
         print("Something Went Wrong")
         print("Check Your Connection please!")
