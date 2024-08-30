@@ -33,7 +33,7 @@ try:
                                           mlp_pred(x_train, y_train, x_test),
                                           knn_pred(x_train, y_train, x_test),
                                           svm_pred(x_train, y_train, x_test),
-                                          # dt_pred(x_train, y_train, x_test), دقت پایین بود
+                                          dt_pred(x_train, y_train, x_test),
                                           rf_pred(x_train, y_train, x_test)
                                           ]).T
 
@@ -55,9 +55,9 @@ try:
         print("SVM :")
         print(classification_report(y_test, svm_pred(x_train, y_train, x_test), zero_division=1))
         print("________________________________________________________________")
-        # print("DecisionTree :")
-        # print(classification_report(y_test, dt_pred(x_train, y_train, x_test), zero_division=1))
-        # print("________________________________________________________________")
+        print("DecisionTree :")
+        print(classification_report(y_test, dt_pred(x_train, y_train, x_test), zero_division=1))
+        print("________________________________________________________________")
         print("RandomForest :")
         print(classification_report(y_test, rf_pred(x_train, y_train, x_test), zero_division=1))
         print("________________________________________________________________")
