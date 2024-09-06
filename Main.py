@@ -8,7 +8,7 @@ try:
     from Models.SVC_Model import *
     from Models.DecisionTreeClassifier_Model import *
     import seaborn as sns
-    from sklearn.metrics import confusion_matrix
+    from sklearn.metrics import confusion_matrix,roc_curve, auc
     from Models.Final_Model import *
 
     # Load data from CSV
@@ -20,10 +20,10 @@ try:
 
         # Define features and target
         X = data[['Open', 'High', 'Low', 'Close', 'Volume', 'Next_Hour_Open',
-                  'ema7', 'ema14', 'ema21', 'histogram',
+                  'ema6', 'ema12', 'ema24','ema48','ema72', 'histogram',
                   'sma', 'squeeze', 'upper_band', 'lower_band', 'macd',
-                  'day_of_week']].iloc[29:n - 1]
-        y = data["Benefit"].iloc[29:n - 1]
+                  'day_of_week']].iloc[71:n - 1]
+        y = data["Benefit"].iloc[71:n - 1]
 
         # Split data
         x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.0005, shuffle=False)
@@ -88,7 +88,17 @@ try:
         plt.savefig("final_predict_bar_chart.jpg")
         plt.show()
 
-
+        #dfgvtbh
+        fpr, tpr, thresholds = roc_curve(y_test, predictions_final)
+        roc_auc = auc(fpr, tpr)
+        plt.plot(fpr, tpr, label='ROC curve (AUC = %0.3f)' % roc_auc)
+        plt.title('ROC')
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.plot([0, 1], [0, 1], 'k--')
+        plt.grid(True)
+        plt.savefig("roc_auc.jpg")
+        plt.show()
     else:
         print("Couldn't Load The Data")
         print("Try Again")
