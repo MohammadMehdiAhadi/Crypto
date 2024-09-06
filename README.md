@@ -86,15 +86,15 @@ NEEDED :
 # GridSearchCv() , Corr() , ClassificationReport()
 -----------------------------------------------------------------------------------------------------
 
-# {'criterion': 'entropy', 'min_samples_leaf': 4, 'min_samples_split': 3, 'splitter': 'best'} 0.4763493074351218 ----->DT
+# {'criterion': 'log_loss', 'min_samples_leaf': 4, 'min_samples_split': 5, 'splitter': 'random'} 0.5363493074351218 ----->DT
 
-# {'algorithm': 'kd_tree', 'n_neighbors': 8, 'weights': 'distance'} 0.5029570254614038 ---->knn
+# {'algorithm': 'kd_tree', 'n_neighbors': 45, 'weights': 'uniform'} 0.5629570254614038 ---->knn
 
-# {'C': 9, 'max_iter': 500, 'penalty': 'l1', 'solver': 'liblinear'} 0.5275123839231892 --->logistic
+# {'C': 9, 'max_iter': 750, 'penalty': 'l2', 'solver': 'lbfgs'} 0.5475123839231892 --->logistic
 
-# {'activation': 'logistic', 'hidden_layer_sizes': (300,), 'solver': 'lbfgs', 'max_iter' : 1500} 0.51514905584001 ---->mlp
+# {'activation': 'logistic', 'hidden_layer_sizes': (300,), 'solver': 'lbfgs', 'max_iter' : 1500} 0.55514905584001 ---->mlp
 
-# {'criterion': 'entropy', 'min_samples_leaf': 2, 'min_samples_split': 3, 'n_estimators': 400} 0.4644477239048167 ---> rf
+# {'criterion': 'log_loss', 'min_samples_leaf': 3, 'min_samples_split': 4, 'n_estimators': 400} 0.5644477239048167 ---> rf
 
 # {'C': 3.0, 'kernel': "rbf", 'tol': 1e-5, 'gamma': 'scale'}  0.5259269979462605  ---> svm
 -----------------------------------------------------------------------------------------------------
