@@ -4,38 +4,48 @@ from Models.RandomForestClassifier_Model import *
 from Models.LogisticRegression_Model import *
 from Models.SVC_Model import *
 from Models.DecisionTreeClassifier_Model import *
+from data_clean import *
+import time
 import numpy as np
 import seaborn as sns
 from sklearn.metrics import confusion_matrix,roc_curve, auc
-print('reading data from the csv file')
+
+
+
+print()
+print('fitting and predicting with models')
+print('it takes some time')
 print('please wait . . .')
-data = pd.read_csv("final_dataframe.csv", index_col="Date")
 
-if not data.empty:
-    n = len(data)
+l_t0 = time.time()
+logistic_predict = logistic_pred(x_train, y_train, x_test)
+l_t1 = time.time()
+logistic_fit_predict_time = l_t1-l_t0
 
-    # Define features and target
-    X = data[['Open', 'High', 'Low', 'Close', 'Volume', 'Next_Hour_Open',
-              'ema6', 'ema12', 'ema24', 'ema48', 'ema72', 'histogram',
-              'sma', 'squeeze', 'upper_band', 'lower_band', 'macd',
-              'day_of_week']].iloc[71:n - 1]
-    y = data["Benefit"].iloc[71:n - 1]
+m_t0 = time.time()
+mlp_predict = mlp_pred(x_train, y_train, x_test)
+m_t1 = time.time()
+mlp_fit_predict_time = m_t1-m_t0
 
-    # Split data
-    x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.0005, shuffle=False)
-    print('Done ')
-    print()
-    print('fitting and predicting with models')
-    print('it takes some time')
-    print('please wait . . .')
-    logistic_predict = logistic_pred(x_train, y_train, x_test)
-    mlp_predict = mlp_pred(x_train, y_train, x_test)
-    knn_predict = knn_pred(x_train, y_train, x_test)
-    svm_predict = svm_pred(x_train, y_train, x_test)
-    decision_tree_predict = dt_pred(x_train, y_train, x_test)
-    random_forest_predict = rf_pred(x_train, y_train, x_test)
-    print('Done')
-    print()
-else:
-    print("Couldn't Load The Data")
-    print("Try Again")
+k_t0 = time.time()
+knn_predict = knn_pred(x_train, y_train, x_test)
+k_t1 = time.time()
+knn_fit_predict_time = k_t1-k_t0
+
+s_t0 = time.time()
+svm_predict = svm_pred(x_train, y_train, x_test)
+s_t1 = time.time()
+svm_fit_predict_time = s_t1-s_t0
+
+d_t0 = time.time()
+decision_tree_predict = dt_pred(x_train, y_train, x_test)
+d_t1 = time.time()
+decision_tree_fit_predict_time = d_t1-d_t0
+
+r_t0 = time.time()
+random_forest_predict = rf_pred(x_train, y_train, x_test)
+r_t1 = time.time()
+random_forest_fit_predict_time = r_t1-r_t0
+
+print('Done')
+print()

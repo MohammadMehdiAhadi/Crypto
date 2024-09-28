@@ -3,6 +3,8 @@ try:
     from Models.Final_Model import *
     from models_fit_predict import *
 
+
+
     # Stacking predictions
     predictions_stacking = np.vstack([logistic_predict,
                                       mlp_predict,
@@ -12,6 +14,11 @@ try:
                                       random_forest_predict
                                       ]).T
 
+    print()
+    print("Summary : ")
+    print(f'training size : {len(x_train)}')
+    print(f'testing size : {len(x_test)}')
+    print("________________________________________________________________")
     # Meta model prediction
     predictions_final = final_pred(predictions_stacking, y_test, predictions_stacking)
     accuracy = np.mean(predictions_final == y_test)
@@ -20,21 +27,27 @@ try:
     # Classification reports
     print("Logistic :")
     print(classification_report(y_test, logistic_predict, zero_division=1))
+    print(f'Logistic fit and predict time : {logistic_fit_predict_time:.2f} s')
     print("________________________________________________________________")
     print("MLPClassifier :")
     print(classification_report(y_test, mlp_predict, zero_division=1))
+    print(f'MLPClassifier fit and predict time : {mlp_fit_predict_time:.2f} s')
     print("________________________________________________________________")
     print("KNN :")
     print(classification_report(y_test, knn_predict, zero_division=1))
+    print(f'KNN fit and predict time : {knn_fit_predict_time:.2f} s')
     print("________________________________________________________________")
     print("SVM :")
     print(classification_report(y_test, svm_predict, zero_division=1))
+    print(f'SVM fit and predict time : {svm_fit_predict_time:.2f} s')
     print("________________________________________________________________")
     print("DecisionTree :")
     print(classification_report(y_test, decision_tree_predict, zero_division=1))
+    print(f'DecisionTree fit and predict time : {decision_tree_fit_predict_time:.2f} s')
     print("________________________________________________________________")
     print("RandomForest :")
     print(classification_report(y_test, random_forest_predict, zero_division=1))
+    print(f'RandomForest fit and predict time : {random_forest_fit_predict_time:.2f} s')
     print("________________________________________________________________")
     print("Final :")
     print(classification_report(y_test, predictions_final))
@@ -63,7 +76,7 @@ try:
     plt.savefig("final_predict_bar_chart.jpg")
     plt.show()
 
-    # dfgvtbh
+    # roc-auc
     fpr, tpr, thresholds = roc_curve(y_test, predictions_final)
     roc_auc = auc(fpr, tpr)
     plt.plot(fpr, tpr, label='ROC curve (AUC = %0.3f)' % roc_auc)
